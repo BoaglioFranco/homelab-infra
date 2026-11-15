@@ -27,4 +27,4 @@ spec:
             httpGet:
               path: /health
               port: 2345
-            periodSeconds: 5
+            periodSeconds: 30

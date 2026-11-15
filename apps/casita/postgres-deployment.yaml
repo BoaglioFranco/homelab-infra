@@ -29,7 +29,7 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 5432
-            periodSeconds: 5
+            periodSeconds: 30
       volumes:
         - name: postgres-data
           persistentVolumeClaim:
