@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: casita
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: api
+          image: ghcr.io/boagliofranco/casita-api:sha-5a5fe803d75adab45c5ee328b0cfc9b32399fcb6
+          ports:
+            - containerPort: 2345
+          envFrom:
+            - secretRef:
+                name: api-config
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 2345
+            periodSeconds: 5
