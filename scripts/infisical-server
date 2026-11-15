@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+set -a
+source "$HOME/.config/infisical/credentials"
+set +a
+
+: "${INFISICAL_CLIENT_ID:?Missing client ID}"
+: "${INFISICAL_CLIENT_SECRET:?Missing client secret}"
+
+INFISICAL_TOKEN="$(
+  infisical login \
+    --method=universal-auth \
+    --client-id="$INFISICAL_CLIENT_ID" \
+    --client-secret="$INFISICAL_CLIENT_SECRET" \
+    --silent \
+    --plain
+)"
+export INFISICAL_TOKEN
+
+unset INFISICAL_CLIENT_ID INFISICAL_CLIENT_SECRET
+
+exec infisical "$@"
