@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications
+  namespace: casita
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notifications
+  template:
+    metadata:
+      labels:
+        app: notifications
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: notifications
+          image: ghcr.io/boagliofranco/casita-notifications:sha-5a5fe803d75adab45c5ee328b0cfc9b32399fcb6
+          ports:
+            - containerPort: 2346
+          envFrom:
+            - secretRef:
+                name: notifications-config
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 2346
+            periodSeconds: 5
