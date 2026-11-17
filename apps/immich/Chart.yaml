@@ -1,0 +1,10 @@
+apiVersion: v2
+name: homelab-immich
+description: Immich deployment for the homelab
+type: application
+version: 0.1.0
+appVersion: v3.2.0
+dependencies:
+  - name: immich
+    version: 0.13.4
+    repository: oci://ghcr.io/immich-app/immich-charts

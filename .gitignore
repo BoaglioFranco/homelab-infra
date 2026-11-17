@@ -7,3 +7,4 @@ kubeconfig
 kubeconfig.*
 *.key
 *.pem
+/apps/immich/charts/
