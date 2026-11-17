@@ -1,0 +1,33 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-database
+  namespace: immich
+spec:
+  instances: 1
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.6-1.1.1
+  postgresql:
+    shared_preload_libraries:
+      - vchord.so
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      secret:
+        name: immich-postgres-auth
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
+  managed:
+    roles:
+      # Immich expects superuser access, including for its built-in DB backups.
+      # This PostgreSQL instance is dedicated to Immich.
+      - name: immich
+        ensure: present
+        login: true
+        superuser: true
+        passwordSecret:
+          name: immich-postgres-auth
+  storage:
+    storageClass: local-path-retain
+    size: 10Gi
